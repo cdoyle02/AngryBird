@@ -1,0 +1,20 @@
+﻿@model List<AbQuestion>
+
+<h3>Angry Bird Questions</h3>
+
+<table class="table">
+
+    <tr>
+        <th>Angry Bird Question</th>
+        <th>Question Rating</th>
+    </tr>
+
+    @foreach (AbQuestion angry in Model)
+    {
+        <tr>
+            <td>@angry.AngryBirdQuestion</td>
+            <td>@angry.QuestionRating</td>
+        </tr>
+    }
+
+</table>

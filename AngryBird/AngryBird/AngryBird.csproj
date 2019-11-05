@@ -8,4 +8,10 @@
   <ItemGroup>
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.18" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Question\" />
+  </ItemGroup>
 </Project>
