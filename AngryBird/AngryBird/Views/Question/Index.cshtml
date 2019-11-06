@@ -17,8 +17,9 @@
     @foreach (AbQuestion angry in Model)
     {
         <tr>
-            <td>@angry.AngryBirdQuestion</td>
-            <td>@angry.QuestionRating</td>
+
+            <td><a href=/Question/ViewQuestion/@angry.QuestionID >@angry.AngryBirdQuestion</a></td>
+            <td>@angry.RatingID</td>
         </tr>
     }
 

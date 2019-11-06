@@ -20,10 +20,28 @@ namespace AngryBird.Controllers
             return View(questions);
         }
 
-        //public IActionResult ViewQuestion()
-        //{
-        //    QuestionRepository repo = new QuestionRepository();
-        //    AbQuestion question = repo.GetAllQuestions(id)
-        //}
+        public IActionResult ViewQuestion(int id)
+        {
+            QuestionRepository repo = new QuestionRepository();
+            AbQuestion question = repo.GetQuestion(id);
+
+            return View(question);
+        }
+
+        public IActionResult UpdateQuestion(int id)
+        {
+            QuestionRepository repo = new QuestionRepository();
+            AbQuestion quest = repo.GetQuestion(id);
+
+            repo.UpdateQuestion(quest);
+
+            if(quest == null)
+            {
+                return View("QuestionNotFound");
+            }
+            return View(quest);
+
+        }
+
     }
 }

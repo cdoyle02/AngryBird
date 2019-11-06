@@ -1,0 +1,29 @@
+﻿@model AbQuestion
+
+<h2>Update Question</h2>
+
+@using (Html.BeginForm("UpdateQuestionToDatabase", "Abquestion", "Post"))
+{
+           <input asp-for="QuestionID" type="hidden" value="@Model.QuestionID" />
+
+           <label asp-for="AngryBirdQuestion" class="control-label">Angry Bird Question</label>
+
+           <input type="text" name="AngryBirdQuestion" class="form-control" value="@Model.AngryBirdQuestion"/>
+
+           <div class="form-group">
+               <label for="">Select Question Category</label>
+
+               <select class="form-control" name="CategoryID" value="">
+
+                   @foreach (var cat in Model.Categories)
+                   {
+                       <option value="@cat.CategoryID">@cat.CategoryID @cat.Name</option>
+                   }
+               </select>
+           </div>
+
+           <input type="submit" value="Update Question" class="btn btn-primary" />
+           
+
+
+}

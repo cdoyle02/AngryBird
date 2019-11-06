@@ -1,6 +1,6 @@
-﻿@model AbQuestion
+﻿@model AbQuestion 
 
-<h3>@Model.AngryBirdQuestion Questions</h3>
+<h3> Question</h3>
 
 <table class="table">
 
@@ -9,6 +9,7 @@
         <th>Question ID</th>
         <th>Angry Bird Question</th>
         <th>Question Rating</th>
+        <th>Category</th>
 
     </tr>
 
@@ -16,8 +17,14 @@
 
         <td>@Model.QuestionID</td>
         <td>@Model.AngryBirdQuestion</td>
-        <td>@Model.QuestionRating</td>
+        <td>@Model.RatingID</td>
+        <td>@Model.CategoryID</td>
 
     </tr>
+
+    <div style="display: block">
+        <a href="/Question/UpdateQuestion/@Model.QuestionID">Update This Question</a>
+
+    </div>
 
 </table>

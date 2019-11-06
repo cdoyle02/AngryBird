@@ -35,19 +35,48 @@ namespace AngryBird
             }
         }
 
-        //public AbQuestion GetQuestion(int id)
-        //{
-        //    MySqlConnection conn = new MySqlConnection(connectionString);
-        //    MySqlCommand cmd = conn.CreateCommand();
-        //    cmd.CommandText = "SELECT * FROM question WHERE questionid = @id;";
-        //    cmd.Parameters.AddWithValue("id", id);
+        public AbQuestion GetQuestion(int id)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT * FROM question WHERE questionid = @id;";
+            cmd.Parameters.AddWithValue("id", id);
 
-        //    using (conn)
-        //    {
-        //        conn.Open();
-        //        MySqlDataReader reader 
-        //    }
+            using (conn)
+            {
+                conn.Open();
+                MySqlDataReader reader = cmd.ExecuteReader();
 
-        //}
+                var question = new AbQuestion();
+
+                while (reader.Read() == true)
+                {
+                    question.QuestionID = reader.GetInt32("questionid");
+                    question.AngryBirdQuestion = reader.GetString("angrybirdquestion");
+                    //question.QuestionRating = reader.GetInt32();
+                }
+
+                return question;
+
+            }
+
+        }
+        public void UpdateQuestion(AbQuestion questionToUpdate)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "UPDATE question SET AngryBirdQuestion = @angrybirdquestion, CategoryID = @categoryid WHERE QuestionID = @id;";
+            
+            cmd.Parameters.AddWithValue("angrybirdquestion", questionToUpdate.AngryBirdQuestion);
+            cmd.Parameters.AddWithValue("categoryid", questionToUpdate.CategoryID);
+            cmd.Parameters.AddWithValue("id", questionToUpdate.QuestionID);
+
+            using (conn)
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+        }
     }
 }
