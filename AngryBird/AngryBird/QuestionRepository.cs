@@ -48,11 +48,14 @@ namespace AngryBird
                 MySqlDataReader reader = cmd.ExecuteReader();
 
                 var question = new AbQuestion();
+                var catRepo = new CategoryRepository();
 
                 while (reader.Read() == true)
                 {
                     question.QuestionID = reader.GetInt32("questionid");
                     question.AngryBirdQuestion = reader.GetString("angrybirdquestion");
+                    question.CategoryID = reader.GetInt32("categoryid");
+                    catRepo.GetCategoryName(question);
                     //question.QuestionRating = reader.GetInt32();
                 }
 
@@ -71,12 +74,34 @@ namespace AngryBird
             cmd.Parameters.AddWithValue("categoryid", questionToUpdate.CategoryID);
             cmd.Parameters.AddWithValue("id", questionToUpdate.QuestionID);
 
+
             using (conn)
             {
                 conn.Open();
                 cmd.ExecuteNonQuery();
             }
 
+        }
+
+        public AbQuestion AssignCategories()
+        {
+            var catRepo = new CategoryRepository();
+
+            var catList = catRepo.GetCategories();
+
+            AbQuestion question = new AbQuestion();
+
+            question.Categories = catList;
+
+            return question;
+        }
+
+        public void AssignCat(AbQuestion question)
+        {
+            var catRepo = new CategoryRepository();
+            var catList = catRepo.GetCategories();
+
+            question.Categories = catList;
         }
     }
 }

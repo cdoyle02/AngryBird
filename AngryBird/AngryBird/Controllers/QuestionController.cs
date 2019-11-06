@@ -32,8 +32,9 @@ namespace AngryBird.Controllers
         {
             QuestionRepository repo = new QuestionRepository();
             AbQuestion quest = repo.GetQuestion(id);
+            repo.AssignCat(quest);
 
-            repo.UpdateQuestion(quest);
+            //repo.UpdateQuestion(quest);
 
             if(quest == null)
             {
@@ -43,5 +44,16 @@ namespace AngryBird.Controllers
 
         }
 
+        public IActionResult UpdateQuestionToDatabase(AbQuestion question)
+        {
+            var repo = new QuestionRepository();
+
+            var catRepo = new CategoryRepository();
+            catRepo.GetCategoryName(question);
+
+            repo.UpdateQuestion(question);
+
+            return RedirectToAction("ViewQuestion", new { id = question.QuestionID });
+        }
     }
 }
