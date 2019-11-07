@@ -22,11 +22,24 @@ namespace AngryBird
 
                 List<AbQuestion> allQuestions = new List<AbQuestion>();
 
+                var catRepo = new CategoryRepository();
+
                 while(reader.Read() == true)
                 {
                     var currentQuestion = new AbQuestion();
                     currentQuestion.QuestionID = reader.GetInt32("questionid");
                     currentQuestion.AngryBirdQuestion = reader.GetString("angrybirdquestion");
+
+                    if (reader.IsDBNull(reader.GetOrdinal("categoryid")))
+                    {
+                        currentQuestion.CategoryID = null;
+                    }
+                    else
+                    {
+                        currentQuestion.CategoryID = reader.GetInt32("categoryid");
+                    }
+
+                    catRepo.GetCategoryName(currentQuestion);
 
                     allQuestions.Add(currentQuestion);
                 }
@@ -83,6 +96,25 @@ namespace AngryBird
 
         }
 
+        public void InsertQuestion(AbQuestion questionToInsert)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "INSERT INTO question (angrybirdquestion, categoryid, ratingid) VALUES (@angrybirdquestion, @categoryid, @ratingid);";
+
+            cmd.Parameters.AddWithValue("angrybirdquestion", questionToInsert.AngryBirdQuestion);
+            cmd.Parameters.AddWithValue("categoryid", questionToInsert.CategoryID);
+            cmd.Parameters.AddWithValue("ratingid", questionToInsert.RatingID);
+
+            using (conn)
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+        } 
+
         public AbQuestion AssignCategories()
         {
             var catRepo = new CategoryRepository();
@@ -103,5 +135,42 @@ namespace AngryBird
 
             question.Categories = catList;
         }
+
+        public void DeleteQuestion(int id)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "DELETE FROM question WHERE questionid = @id;";
+            cmd.Parameters.AddWithValue("id", id);
+
+            using (conn)
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteQuestionFromRating(int id)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "DELETE FROM rating WHERE questionid = @id;";
+            cmd.Parameters.AddWithValue("id", id);
+
+            using (conn)
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public void DeleteFromAllTables(int id)
+        {
+            DeleteQuestionFromRating(id);
+            DeleteQuestion(id);
+        }
+
     }
 }

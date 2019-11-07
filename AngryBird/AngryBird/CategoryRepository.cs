@@ -50,9 +50,16 @@ namespace AngryBird
 
                 while (reader.Read() == true)
                 {
-                    
-                    question.Category = reader.GetString("category");
-                    
+
+                    if (reader.IsDBNull(reader.GetOrdinal("category")))
+                    {
+                        question.Category = null;
+                    }
+                    else
+                    {
+                        question.Category = reader.GetString("category");
+                    }
+
                 }
                
             }

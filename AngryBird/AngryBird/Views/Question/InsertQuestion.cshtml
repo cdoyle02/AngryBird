@@ -1,0 +1,31 @@
+﻿@model AbQuestion
+
+<h2> Create a New Question</h2>
+
+@using (Html.BeginForm("InsertQuestionIntoDatabase", "Question", "Post"))
+
+{
+    <input asp-for="QuestionID" type="hidden" value="" />
+
+    <label asp-for="AngryBirdQuestion" class="control-label">Question</label>
+
+    <input type="text" angrybirdquestion="AngryBirdQuestion" class="form-control" value="" />
+
+    <div class="form-group">
+
+        <label for="">Select a Category</label>
+
+        <select class="form-control" name="CategoryID" value="">
+
+            @foreach (var quest in Model.Categories)
+            {
+                <option value="@quest.CategoryID">@quest.CategoryID @quest.Name</option>
+            }
+
+        </select>
+
+    </div>
+
+    <input type="submit" value="Create Question" class="btn btn-primary" /> 
+
+}

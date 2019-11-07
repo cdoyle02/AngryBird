@@ -55,5 +55,33 @@ namespace AngryBird.Controllers
 
             return RedirectToAction("ViewQuestion", new { id = question.QuestionID });
         }
+
+        public IActionResult InsertQuestion()
+        {
+            var repo = new QuestionRepository();
+            var quest = repo.AssignCategories(); 
+
+                return View(quest);
+        }
+
+        public IActionResult InsertQuestionIntoDatabase(AbQuestion questionToInsert)
+        {
+            var repo = new QuestionRepository();
+
+            repo.InsertQuestion(questionToInsert);
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteQuestion(AbQuestion question)
+        {
+            var repo = new QuestionRepository();
+
+            repo.DeleteFromAllTables(question.QuestionID);
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 }
