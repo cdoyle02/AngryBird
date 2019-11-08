@@ -69,6 +69,7 @@ namespace AngryBird.Controllers
             var repo = new QuestionRepository();
 
             repo.InsertQuestion(questionToInsert);
+            repo.InsertRating(questionToInsert);
 
             return RedirectToAction("Index");
         }

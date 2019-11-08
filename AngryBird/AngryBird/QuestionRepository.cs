@@ -13,7 +13,7 @@ namespace AngryBird
         {
             MySqlConnection conn = new MySqlConnection(connectionString);
             MySqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "SELECT * FROM question;";
+            cmd.CommandText = "SELECT * FROM question ORDER BY ratingid desc;";
 
             using (conn)
             {
@@ -37,6 +37,15 @@ namespace AngryBird
                     else
                     {
                         currentQuestion.CategoryID = reader.GetInt32("categoryid");
+                    }
+
+                    if (reader.IsDBNull(reader.GetOrdinal("ratingid")))
+                    {
+                        currentQuestion.RatingID = null;
+                    }
+                    else
+                    {
+                        currentQuestion.RatingID = reader.GetInt32("ratingid");
                     }
 
                     catRepo.GetCategoryName(currentQuestion);
@@ -67,8 +76,30 @@ namespace AngryBird
                 {
                     question.QuestionID = reader.GetInt32("questionid");
                     question.AngryBirdQuestion = reader.GetString("angrybirdquestion");
-                    question.CategoryID = reader.GetInt32("categoryid");
+                    
+
+                    if (reader.IsDBNull(reader.GetOrdinal("categoryid")))
+                    {
+                        question.CategoryID = null;
+                    }
+                    else
+                    {
+                        question.CategoryID = reader.GetInt32("categoryid");
+                    }
+
                     catRepo.GetCategoryName(question);
+
+                    if (reader.IsDBNull(reader.GetOrdinal("ratingid")))
+                    {
+                        question.RatingID = null;
+                    }
+                    else
+                    {
+                        question.RatingID = reader.GetInt32("ratingid");
+                    }
+
+
+
                     //question.QuestionRating = reader.GetInt32();
                 }
 
@@ -81,12 +112,12 @@ namespace AngryBird
         {
             MySqlConnection conn = new MySqlConnection(connectionString);
             MySqlCommand cmd = conn.CreateCommand();
-            cmd.CommandText = "UPDATE question SET AngryBirdQuestion = @angrybirdquestion, CategoryID = @categoryid WHERE QuestionID = @id;";
+            cmd.CommandText = "UPDATE question SET AngryBirdQuestion = @angrybirdquestion, CategoryID = @categoryid, ratingid = @ratingid WHERE QuestionID = @id;";
             
             cmd.Parameters.AddWithValue("angrybirdquestion", questionToUpdate.AngryBirdQuestion);
             cmd.Parameters.AddWithValue("categoryid", questionToUpdate.CategoryID);
             cmd.Parameters.AddWithValue("id", questionToUpdate.QuestionID);
-
+            cmd.Parameters.AddWithValue("ratingid", questionToUpdate.RatingID);
 
             using (conn)
             {
@@ -113,7 +144,27 @@ namespace AngryBird
                 cmd.ExecuteNonQuery();
             }
 
-        } 
+        }
+
+        public void InsertRating(AbQuestion questionToInsert)
+        {
+            MySqlConnection conn = new MySqlConnection(connectionString);
+
+            MySqlCommand cmd = conn.CreateCommand();
+            cmd.CommandText = "INSERT INTO rating (rating, questionid) VALUES (@rating, @questionid);";
+
+            cmd.Parameters.AddWithValue("rating", questionToInsert.Rating);
+            cmd.Parameters.AddWithValue("questionid", questionToInsert.QuestionID);
+            
+
+            using (conn)
+            {
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+
+        }
+
 
         public AbQuestion AssignCategories()
         {
