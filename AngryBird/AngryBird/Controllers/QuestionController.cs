@@ -32,6 +32,7 @@ namespace AngryBird.Controllers
         {
             QuestionRepository repo = new QuestionRepository();
             AbQuestion quest = repo.GetQuestion(id);
+
             repo.AssignCat(quest);
 
             //repo.UpdateQuestion(quest);

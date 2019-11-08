@@ -97,10 +97,6 @@ namespace AngryBird
                     {
                         question.RatingID = reader.GetInt32("ratingid");
                     }
-
-
-
-                    //question.QuestionRating = reader.GetInt32();
                 }
 
                 return question;
